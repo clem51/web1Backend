@@ -1,0 +1,1 @@
+INSERT INTO dashboard_db.imgs (img_id, img_name, article, add_date, src) VALUES (1, 'warcanoe', '1', '2020-06-04', 'http://herbkanehawaii.com/wp-content/uploads/2013/05/Herb-Kane_War-Canoes-of-the-New-Zealand-Maori.jpg');
