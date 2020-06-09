@@ -1,18 +1,23 @@
 <?php
 
 namespace BackOffice\Models;
+
 use \PDO;
+use PDOException;
 
-class Database{
+class Database
+{
 
-  public $pdo;
+    public $connection;
 
-  function __construct($dns, $user, $password){
-    try{
-      $this->pdo = new PDO( $dns, $user, $password,[PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
-      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch(PDOException $e){
-        die("ERROR: Could not connect. " . $e->getMessage());
+    function __construct($host, $dbname, $user, $password, $port = 3306, $driver = "mysql")
+    {
+        try {
+            $dns = "{$driver}:host={$host};dbname=${dbname};port={$port}";
+            $this->connection = new PDO($dns, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("ERROR: Could not connect. " . $e->getMessage());
+        }
     }
-  }
 }

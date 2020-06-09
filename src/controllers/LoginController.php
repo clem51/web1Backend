@@ -2,36 +2,58 @@
 
 namespace BackOffice\Controllers;
 
+use BackOffice\Models\UserRepository;
+use BackOffice\Session;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Views\Twig;
+use Slim\App;
+use Slim\Psr7\Request;
+use Twig\Environment as Twig;
 
-Class LoginController{
-    
+
+class LoginController extends AbstractController
+{
+
     private $user_repository;
 
-    function __construct($user_repository){
+    function __construct(UserRepository $user_repository)
+    {
         $this->user_repository = $user_repository;
     }
 
-    function index(Request $request, Response $response, $args){
-        return Twig::fromRequest($request)->render($response, 'login.twig');
+    public function index(Response $response, Twig $twig, Session $session)
+
+    {
+        // uncomment when logout is implemented
+//        if ($session->getCurrentUser()) {
+//            return header('Location: /');
+//        }
+        return $this->template($twig, $response, 'login.twig');
     }
 
-    function login(Request $request, Response $response, $args){
+
+    function login(Request $request, Response $response, Twig $twig, Session $session, App $app)
+    {
         $body = $request->getParsedBody();
         $username = $body['username'];
         $password = $body['password'];
         $user = $this->user_repository->getUserByUsername($username);
-        if($user){
+
+        if ($user) {
             // Attempt to execute the prepared statement
-            if(password_verify($password, $user->password)){
-                // TODO set session
-                return Twig::fromRequest($request)->render($response, 'dashboard.twig');
-            }else{
-                // TODO redirect with errors
-                return Twig::fromRequest($request)->render($response, 'login.twig', ['errors' => 'wrong credentials' ]);
+            if (password_verify($password, $user->password)) {
+                $session->setCurrentUser($username);
+                return header('Location: /');
+            } else {
+                return $this->template($twig, $response, 'login.twig', ['errors' => ['password' => 'password does not match']]);
             }
         }
+        // user not found
+        return $this->template($twig, $response, 'login.twig', ['errors' => ['username' => 'user not found']]);
+    }
+
+    public function logout(Session $session)
+    {
+        $session->unsetCurrentUser();
+        return header("/login");
     }
 }
