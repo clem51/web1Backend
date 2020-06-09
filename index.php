@@ -44,7 +44,7 @@ $container->set(Database::class, factory(function () use ($app) {
     return DatabaseFactory::getDevelopmentServerConnection();
 }));
 
-
+// TODO create middleware for avoid non-logged user to access admin panel
 $app->get('/', [DashboardController::class, 'index'])
     ->setName('index');
 

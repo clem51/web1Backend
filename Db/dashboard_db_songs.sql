@@ -1,1 +1,0 @@
-INSERT INTO dashboard_db.songs (sound_id, sound_name, article, add_date, src) VALUES (1, 'haka', '1', '2020-06-04', 'https://www.youtube.com/watch?v=kr5Znx4cxKQ');

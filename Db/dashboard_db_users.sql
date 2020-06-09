@@ -1,2 +1,0 @@
-INSERT INTO dashboard_db.users (id, username, password, rights, created_at) VALUES (1, 'admin', '$2y$10$YykuG0tbDBFZRNFAUQMYZebNHIO2PKWbw3fsXtrlWBGGs7uqaoCQy', 'admin', '2020-06-05 13:54:30');
-INSERT INTO dashboard_db.users (id, username, password, rights, created_at) VALUES (2, 'user', '$2y$10$I7Y2mrmTKYItujrjPooPVuTr5zedh5la6FJ8gLfpful.1qfPGOvjC', 'user', '2020-06-05 13:54:30');
