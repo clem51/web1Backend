@@ -12,16 +12,19 @@ class Session
         session_start();
     }
 
-    public function getCurrentUser(): string
+    public function getCurrentUser(): ?string
     {
         //get current user from session
-        return $_SESSION["currentUser"];
+        if (isset($_SESSION["currentUser"])) {
+            return $_SESSION["currentUser"];
+        }
+        return null;
     }
 
     public function setCurrentUser(string $username): void
     {
         //register current user in session
-        $_SESSION['currentUser']= $username;
+        $_SESSION['currentUser'] = $username;
     }
 
     public function unsetCurrentUser()
