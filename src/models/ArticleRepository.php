@@ -9,8 +9,9 @@ class ArticleRepository extends AbstractRepository
 
     public function getAll(): array
     {
-        # TODO select only necessary fields
-        $sql = "SELECT A.id as article_id , A.name as article_name, A.id, C.*  FROM dashboard_db.articles A LEFT JOIN content C on A.id= C.article";
+        $sql = "SELECT A.id as article_id , A.name as article_name, C.*  
+                FROM dashboard_db.articles A 
+                LEFT JOIN content C on A.id = C.article";
         $stmt = $this->db->connection->prepare($sql);
         $stmt->execute();
         return $this->oneToMany($stmt->fetchAll(PDO::FETCH_ASSOC));
