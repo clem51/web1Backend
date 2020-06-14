@@ -1,17 +1,18 @@
 <?php
 
-use BackOffice\Controllers\LoginController;
-use BackOffice\Controllers\ArticlesController;
+use BackOffice\controllers\LoginController;
+use BackOffice\controllers\ArticlesController;
 use BackOffice\DatabaseFactory;
-use BackOffice\Models\Database;
+use BackOffice\models\Database;
+use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
 use DI\Bridge\Slim\Bridge;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use function DI\factory;
-use BackOffice\Middlewares\AuthenticationMiddleware;
-use BackOffice\Controllers\ApiController;
+use BackOffice\middlewares\AuthenticationMiddleware;
+use BackOffice\controllers\ApiController;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -46,6 +47,18 @@ $container->set(Database::class, factory(function () use ($app) {
     return DatabaseFactory::getDevelopmentServerConnection();
 }));
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
 
 $app->group('/', function (RouteCollectorProxy $group) {
     $group->get('', [ArticlesController::class, 'index'])->setName('index');
@@ -62,5 +75,8 @@ $app->group('/login', function (RouteCollectorProxy $group) {
 $app->get('/logout', [LoginController::class, 'logout']);
 $app->get('/api/articles', [ApiController::class, 'index']);
 
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+    throw new HttpNotFoundException($request);
+});
 
 $app->run();

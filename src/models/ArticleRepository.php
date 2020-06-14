@@ -1,6 +1,6 @@
 <?php
 
-namespace BackOffice\Models;
+namespace BackOffice\models;
 use \PDO;
 
 class ArticleRepository extends AbstractRepository {

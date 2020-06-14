@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BackOffice;
+namespace BackOffice\services;
 
 
-class Session
+class SessionService
 {
     public function __construct()
     {

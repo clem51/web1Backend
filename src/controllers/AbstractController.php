@@ -1,6 +1,6 @@
 <?php
 
-namespace BackOffice\Controllers;
+namespace BackOffice\controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Factory\StreamFactory;

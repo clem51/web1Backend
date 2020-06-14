@@ -1,12 +1,12 @@
 <?php
 
-namespace BackOffice\Controllers;
+namespace BackOffice\controllers;
 
-use BackOffice\Session;
+use BackOffice\services\SessionService as Session;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Request;
 use Twig\Environment as Twig;
-use BackOffice\Models\ArticleRepository;
+use BackOffice\models\ArticleRepository;
 
 class ArticlesController extends AbstractController
 {
@@ -15,7 +15,7 @@ class ArticlesController extends AbstractController
     {
         // get All articles and show them
         $articles = $repo->getAll();
-        return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles]);
+        return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles, 'content_type' => CONTENT_TYPE]);
     }
 
     public function create(Request $request, Response $response, ArticleRepository $repo){

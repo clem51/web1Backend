@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BackOffice\Models;
+namespace BackOffice\models;
 
 
 abstract class AbstractRepository

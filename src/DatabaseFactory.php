@@ -2,7 +2,7 @@
 
 namespace BackOffice;
 
-use BackOffice\Models\Database;
+use BackOffice\models\Database;
 
 class DatabaseFactory
 {

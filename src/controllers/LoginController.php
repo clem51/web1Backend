@@ -1,9 +1,9 @@
 <?php
 
-namespace BackOffice\Controllers;
+namespace BackOffice\controllers;
 
-use BackOffice\Models\UserRepository;
-use BackOffice\Session;
+use BackOffice\models\UserRepository;
+use BackOffice\services\SessionService as Session;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\App;
 use Slim\Psr7\Request;

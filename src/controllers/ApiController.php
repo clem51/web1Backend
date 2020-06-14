@@ -1,8 +1,8 @@
 <?php
 
-namespace BackOffice\Controllers;
+namespace BackOffice\controllers;
 use Psr\Http\Message\ResponseInterface as Response;
-use BackOffice\Models\ArticleRepository;
+use BackOffice\models\ArticleRepository;
 use \PDO;
 
 class ApiController {
