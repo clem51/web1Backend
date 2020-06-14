@@ -22,7 +22,6 @@ class ArticlesController extends AbstractController
     {
         $body = $request->getParsedBody();
         $content_params = $this->aggregate($body);
-        var_dump($content_params);
         $repo->create($body['name'], $content_params);
         $response->withStatus(201);
         return $response->withHeader('Location', '/');
