@@ -1,7 +1,7 @@
 <?php
 
 use BackOffice\Controllers\LoginController;
-use BackOffice\Controllers\DashboardController;
+use BackOffice\Controllers\ArticlesController;
 use BackOffice\DatabaseFactory;
 use BackOffice\Models\Database;
 use Slim\Routing\RouteCollectorProxy;
@@ -10,14 +10,16 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use function DI\factory;
-
+use BackOffice\Middlewares\AuthenticationMiddleware;
+use BackOffice\Controllers\ApiController;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 
 $app = Bridge::create();
 
-
+$app->addRoutingMiddleware();
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
 // Récupération du container
 $container = $app->getContainer();
 
@@ -44,13 +46,21 @@ $container->set(Database::class, factory(function () use ($app) {
     return DatabaseFactory::getDevelopmentServerConnection();
 }));
 
-// TODO create middleware for avoid non-logged user to access admin panel
-$app->get('/', [DashboardController::class, 'index'])
-    ->setName('index');
+
+$app->group('/', function (RouteCollectorProxy $group) {
+    $group->get('', [ArticlesController::class, 'index'])->setName('index');
+    $group->post('', [ArticlesController::class, 'create'])->setName('create');
+    $group->get('delete/{id}', [ArticlesController::class, 'delete'])->setName('delete');
+    $group->post('update/{id}', [ArticlesController::class, 'do_update'])->setName('do_update');
+    $group->get('update/{id}', [ArticlesController::class, 'update'])->setName('update');
+})->add(new AuthenticationMiddleware($container));
 
 $app->group('/login', function (RouteCollectorProxy $group) {
-    $group->get('', [LoginController::class, 'index']);
-    $group->post('', [LoginController::class, 'login']);
+    $group->get('', [LoginController::class, 'index'])->setName('index');;
+    $group->post('', [LoginController::class, 'login'])->setName('login');;
 });
+$app->get('/logout', [LoginController::class, 'logout']);
+$app->get('/api/articles', [ApiController::class, 'index']);
+
 
 $app->run();

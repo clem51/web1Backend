@@ -14,6 +14,6 @@ class DatabaseFactory
     public static function getProductionServerConnection(): Database
     {
         $opts = parse_url(getenv('DATABASE_URL'));
-        return new Database($opts["host"], ltrim($opts["path"], '/'), $opts["user"], $opts["pass"], $opts["port"], "pgsql");
+        return new Database($opts["host"], ltrim($opts["path"], '/'), $opts["user"], $opts["pass"], $opts["port"]);
     }
 }

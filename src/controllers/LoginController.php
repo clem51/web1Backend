@@ -21,12 +21,10 @@ class LoginController extends AbstractController
     }
 
     public function index(Response $response, Twig $twig, Session $session)
-
     {
-        // uncomment when logout is implemented
-//        if ($session->getCurrentUser()) {
-//            return header('Location: /');
-//        }
+        if ($session->getCurrentUser()) {
+           return header('Location: /');
+        }
         return $this->template($twig, $response, 'login.twig');
     }
 
@@ -42,7 +40,7 @@ class LoginController extends AbstractController
             // Attempt to execute the prepared statement
             if (password_verify($password, $user->password)) {
                 $session->setCurrentUser($username);
-                return header('Location: /');
+                return $response->withHeader('Location', '/');
             } else {
                 return $this->template($twig, $response, 'login.twig', ['errors' => ['password' => 'password does not match']]);
             }
@@ -51,9 +49,9 @@ class LoginController extends AbstractController
         return $this->template($twig, $response, 'login.twig', ['errors' => ['username' => 'user not found']]);
     }
 
-    public function logout(Session $session)
+    public function logout(Response $response, Session $session)
     {
         $session->unsetCurrentUser();
-        return header("/login");
+        return $response->withHeader('Location', '/login');
     }
 }
