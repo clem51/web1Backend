@@ -10,7 +10,7 @@ class ArticleRepository extends AbstractRepository
     public function getAll(): array
     {
         $sql = "SELECT A.id as article_id , A.name as article_name, C.*  
-                FROM dashboard_db.articles A 
+                FROM articles A 
                 LEFT JOIN content C on A.id = C.article";
         $stmt = $this->db->connection->prepare($sql);
         $stmt->execute();
