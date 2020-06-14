@@ -14,18 +14,16 @@
     </div>
     {% block javascripts %}
         <script type="text/javascript">
-            const createSelectElement = () => {
+            const createSelectElement = (id) => {
                 let $select = document.createElement("select");
                 $select.classList.add("form-control");
-
+                $select.setAttribute("name", `type_${id}`);
                 ['img', 'text', 'video'].forEach((type) => {
                     let $option = document.createElement("option");
                     $option.value = type;
                     $option.text = type;
                     $select.appendChild($option);
-
                 })
-
                 return $select;
             }
             const createDeleteButton = () => {
@@ -41,12 +39,13 @@
                 return $button;
             }
 
-            const createInputElement = () => {
-
+            const createInputElement = (id, reason) => {
                 let $input = document.createElement("input");
                 $input.classList.add("form-control");
+                $input.setAttribute("type", "text")
+                $input.setAttribute("name", `${reason}_${id}`)
+                $input.setAttribute("placeholder", reason)
                 return $input;
-
             }
 
             const createFormElement = () => {
@@ -57,8 +56,9 @@
                 $group.style.display = "flex";
                 $group.classList.add("col-auto");
                 $div.appendChild($group);
+                let id = Math.floor(Math.random() * 100);
 
-                [createSelectElement(), createInputElement(), createDeleteButton()].forEach($el => $group.appendChild($el))
+                [createSelectElement(id), createInputElement(id, "value"), createInputElement(id, "name"),  createDeleteButton()].forEach($el => $group.appendChild($el))
                 return $div;
             };
             const $addform = document.querySelector(".addform");

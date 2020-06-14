@@ -11,17 +11,25 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Text</th>
+            <th scope="col">Contents</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for article in articles %}
             <tr>
-                <th scope="row">{{ article.id }}</th>
+                <th scope="row">{{ article.article_id }}</th>
                 <td>{{ article.name }}</td>
                 <td>
-                    <a href="/delete/{{ article.id }}" class="btn btn-danger">Delete</a>
-                    <a href="/update/{{ article.id }}" class="btn btn-success">Update</a>
+                    {% for content in article.contents %}
+                    <div> {{ content.value }}</div>
+                    <div> {{ content.name }}</div>
+                        <hr/>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="/delete/{{ article.article_id }}" class="btn btn-danger">Delete</a>
+                    <a href="/update/{{ article.article_id   }}" class="btn btn-success">Update</a>
                 </td>
             </tr>
         {% endfor %}
