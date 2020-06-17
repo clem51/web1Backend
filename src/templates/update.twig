@@ -93,8 +93,9 @@
             }
 
             $table = document.querySelector('table');
-            document.querySelector('.create-article').addEventListener('click', () => {
+            document.querySelector('.create-article').addEventListener('click', (e) => {
                 createRow($table.insertRow(-1));
+                e.target.disabled = true;
             })
         </script>
     {% endblock %}

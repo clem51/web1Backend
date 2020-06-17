@@ -22,6 +22,6 @@ class ContentController extends AbstractController
         $content_params = $this->aggregate($body);
         $repo->create($id, $content_params);
         $response->withStatus(201);
-        return $response->withHeader('Location', '/');
+        return $response->withHeader('Location', "/update/$id");
     }
 }
