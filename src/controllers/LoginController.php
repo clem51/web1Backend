@@ -13,23 +13,23 @@ use Twig\Environment as Twig;
 class LoginController extends AbstractController
 {
 
-    private $user_repository;
+    private UserRepository $user_repository;
 
     function __construct(UserRepository $user_repository)
     {
         $this->user_repository = $user_repository;
     }
 
-    public function index(Response $response, Twig $twig, Session $session)
+    public function index(Response $response, Twig $twig, Session $session): Response
     {
         if ($session->getCurrentUser()) {
-           return header('Location: /');
+            return $response->withHeader('Location', '/');
         }
         return $this->template($twig, $response, 'login.twig');
     }
 
 
-    function login(Request $request, Response $response, Twig $twig, Session $session, App $app)
+    function login(Request $request, Response $response, Twig $twig, Session $session, App $app): Response
     {
         $body = $request->getParsedBody();
         $username = $body['username'];
@@ -49,7 +49,7 @@ class LoginController extends AbstractController
         return $this->template($twig, $response, 'login.twig', ['errors' => ['username' => 'user not found']]);
     }
 
-    public function logout(Response $response, Session $session)
+    public function logout(Response $response, Session $session): Response
     {
         $session->unsetCurrentUser();
         return $response->withHeader('Location', '/login');

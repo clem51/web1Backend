@@ -16,11 +16,11 @@ Cela consiste en un découpage de la logique entre les différentes types de cla
 
 ### Les routes API
 
-* Pour un article en particulier :
-https://backoffice.zelazna.fr/api/articles/{id}
+* Pour un article en particulier   
+Ex : L' article 1  
+https://backoffice.zelazna.fr/api/articles/1
 
-* Pour tout les articles :
-https://backoffice.zelazna.fr/api/articles
+* Pour tout les articles : https://backoffice.zelazna.fr/api/articles
 
 ### Choix techniques
 

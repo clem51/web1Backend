@@ -6,7 +6,7 @@ namespace BackOffice\models;
 
 abstract class AbstractRepository
 {
-    protected $db;
+    protected Database $db;
 
     function __construct(Database $database)
     {

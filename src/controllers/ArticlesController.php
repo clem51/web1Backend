@@ -11,14 +11,14 @@ use BackOffice\models\ArticleRepository;
 class ArticlesController extends AbstractController
 {
 
-    public function index(Response $response, Twig $twig, Session $session, ArticleRepository $repo)
+    public function index(Response $response, Twig $twig, Session $session, ArticleRepository $repo) :Response
     {
         // get All articles and show them
         $articles = $repo->getAll();
         return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles, 'content_type' => CONTENT_TYPE]);
     }
 
-    public function create(Request $request, Response $response, ArticleRepository $repo)
+    public function create(Request $request, Response $response, ArticleRepository $repo) :Response
     {
         $body = $request->getParsedBody();
         $content_params = $this->aggregate($body);
@@ -27,26 +27,31 @@ class ArticlesController extends AbstractController
         return $response->withHeader('Location', '/');
     }
 
-    public function delete(int $id, Response $response, ArticleRepository $repo)
+    public function delete(int $id, Response $response, ArticleRepository $repo) :Response
     {
         $repo->delete($id);
         return $response->withHeader('Location', '/');
     }
 
-    public function do_update(int $id, Response $response, ArticleRepository $repo, Request $request)
+    public function do_update(int $id, Response $response, ArticleRepository $repo, Request $request) :Response
     {
         $body = $request->getParsedBody();
         $repo->update($body, $id);
         return $response->withHeader('Location', '/');
     }
 
-    public function update(int $id, Twig $twig, Response $response, ArticleRepository $repo)
+    public function update(int $id, Twig $twig, Response $response, ArticleRepository $repo) :Response
     {
         $article = $repo->getById($id);
         return $this->template($twig, $response, 'update.twig', ['article' => $article]);
     }
 
-    private function aggregate($data)
+    /**
+     * Plug together form data with the same id
+     * @param array $data
+     * @return array
+     */
+    private function aggregate(array $data) :array
     {
         $result = [];
         foreach ($data as $key => $value) {

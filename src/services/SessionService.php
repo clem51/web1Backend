@@ -27,7 +27,7 @@ class SessionService
         $_SESSION['currentUser'] = $username;
     }
 
-    public function unsetCurrentUser()
+    public function unsetCurrentUser(): void
     {
         // remove user from session
         session_destroy();

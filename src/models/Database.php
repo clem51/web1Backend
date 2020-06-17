@@ -8,9 +8,9 @@ use PDOException;
 class Database
 {
 
-    public $connection;
+    public PDO $connection;
 
-    function __construct($host, $dbname, $user, $password, $port = 3306, $driver = "mysql")
+    function __construct(string $host, string $dbname, string $user, string $password, int $port = 3306, string $driver = "mysql")
     {
         try {
             $dns = "{$driver}:host={$host};dbname=${dbname};port={$port}";

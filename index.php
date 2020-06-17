@@ -1,18 +1,18 @@
 <?php
 
-use BackOffice\controllers\LoginController;
-use BackOffice\controllers\ArticlesController;
 use BackOffice\DatabaseFactory;
+use BackOffice\controllers\ApiController;
+use BackOffice\controllers\ArticlesController;
+use BackOffice\controllers\LoginController;
+use BackOffice\middlewares\AuthenticationMiddleware;
 use BackOffice\models\Database;
+use DI\Bridge\Slim\Bridge;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
-use DI\Bridge\Slim\Bridge;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use function DI\factory;
-use BackOffice\middlewares\AuthenticationMiddleware;
-use BackOffice\controllers\ApiController;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -21,18 +21,18 @@ $app = Bridge::create();
 
 $app->addRoutingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
-// Récupération du container
 $container = $app->getContainer();
 
-// Lorsque la classe Environment est demandée, instancier tel que:
+
 $container->set(Environment::class, factory(function () use ($app) {
-    // Voir https://twig.symfony.com/doc/2.x/api.html#basics
+
+    // register twig in container
     $loader = new FilesystemLoader(__DIR__ . '/src/templates');
     $twig = new Environment($loader, [
         'debug' => true,
     ]);
 
-    // Ajout d'une fonction urlFor() pour générer des liens
+    // register new function to match controller routes and their names
     $uriFunc = new TwigFunction('urlFor', [$app->getRouteCollector()->getRouteParser(), 'urlFor']);
     $twig->addFunction($uriFunc);
 
@@ -41,6 +41,7 @@ $container->set(Environment::class, factory(function () use ($app) {
 
 
 $container->set(Database::class, factory(function () use ($app) {
+    // if the environment variable is set
     if (getenv('DATABASE_URL')) {
         return DatabaseFactory::getProductionServerConnection();
     }
@@ -72,11 +73,11 @@ $app->group('/login', function (RouteCollectorProxy $group) {
     $group->get('', [LoginController::class, 'index'])->setName('index');;
     $group->post('', [LoginController::class, 'login'])->setName('login');;
 });
-$app->get('/logout', [LoginController::class, 'logout']);
+$app->get('/logout', [LoginController::class, 'logout'])->setName('logout');
 
-$app->group('/api', function (RouteCollectorProxy $group){
+$app->group('/api', function (RouteCollectorProxy $group) {
     $group->get('/articles', [ApiController::class, 'index']);
-    $group->get('/articles/{id}',[ApiController::class, 'detail']);
+    $group->get('/articles/{id}', [ApiController::class, 'detail']);
 });
 
 

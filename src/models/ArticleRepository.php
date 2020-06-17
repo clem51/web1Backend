@@ -6,7 +6,10 @@ use \PDO;
 
 class ArticleRepository extends AbstractRepository
 {
-
+    /**
+     * get all articles with the associate content
+     * @return array
+     */
     public function getAll(): array
     {
         $sql = "SELECT A.id as article_id , A.name as article_name, C.*  
@@ -17,7 +20,12 @@ class ArticleRepository extends AbstractRepository
         return $this->oneToMany($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
-    private function oneToMany($data)
+    /**
+     * Format results to appear as a one to many orm operation
+     * @param array $data
+     * @return array
+     */
+    private function oneToMany(array $data)
     {
         $result = [];
         foreach ($data as $record) {
@@ -75,7 +83,7 @@ class ArticleRepository extends AbstractRepository
         $stmt->execute();
     }
 
-    public function getById(int $id)
+    public function getById(int $id): array
     {
         $sql = "SELECT A.id as article_id , A.name as article_name, C.*  
                 FROM articles A 

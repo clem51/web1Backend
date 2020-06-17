@@ -3,12 +3,17 @@
 namespace BackOffice\models;
 
 use \PDO;
+use stdClass;
 
 class UserRepository extends AbstractRepository
 {
 
-
-    function getUserByUsername(string $username)
+    /**
+     * get the username and password form database
+     * @param string $username
+     * @return stdClass
+     */
+    function getUserByUsername(string $username): stdClass
     {
         $sql = "SELECT id, username, password FROM users WHERE username = :username";
         $stmt = $this->db->connection->prepare($sql);
