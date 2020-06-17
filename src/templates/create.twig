@@ -47,8 +47,15 @@
                     $select.appendChild($option);
                 })
                 $select.addEventListener('change', (e) => {
-                    if (e.target.value === 'img') {
-                        e.target.nextSibling.type = "file"
+                    let nextSibling = e.target.nextSibling
+                    if (e.target.value === 'img' || e.target.value === 'video') {
+                        nextSibling.type = "file"
+                        nextSibling.classList.add("btn", "btn-secondary")
+                        nextSibling.classList.remove("form-control")
+                    } else {
+                        nextSibling.type = "text"
+                        nextSibling.classList.add("form-control")
+                        nextSibling.classList.remove("btn", "btn-secondary")
                     }
                 })
                 return $select;
