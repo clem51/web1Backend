@@ -19,8 +19,6 @@
     <style type="text/css">
         body {
             font: 14px sans-serif;
-            background-image: url(https://images.pexels.com/photos/4194857/pexels-photo-4194857.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260);
-            background-size: cover;
         }
 
         .wrapper {
@@ -40,6 +38,9 @@
             width: 100%;
             text-align: center;
         }
+        .container{
+            width: 100vw;
+        }
     </style>
 </head>
 <body>
@@ -47,6 +48,8 @@
     <a class="navbar-brand" href="/">Home</a>
     <a href="{{ urlFor('logout') }}" class="btn btn-outline-info my-2 my-sm-0">Logout</a>
 </nav>
-{% block content %}
-{% endblock %}
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
 </body>

@@ -1,15 +1,101 @@
 {% extends "layout.twig" %}
 {% block content %}
-<div class="wrapper">
-    <h4>Update an article</h2>
-    <form action="/update/{{article.id}}" method="post">
-        <div class="form-group">
-            <label>Text</label>
-            <input type="text" name="name" class="form-control" value="{{article.name}}">
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Update">
-        </div>
-    </form>
-</div>
+    <div class="wrapper">
+        <h2>Update an article</h2>
+        <form action="{{ urlFor("update", { id: article.article_id }) }}" method="post">
+            <div class="form-group">
+                <label>Text</label>
+                <input type="text" name="name" class="form-control" value="{{ article.name }}">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Update Article">
+            </div>
+        </form>
+        <button class="btn btn-primary create-article">Create Content</button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#id</th>
+                <th scope="col">Value</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for content in article.contents %}
+                <tr>
+                    <td>{{ content.content_id }}</td>
+                    <td> {{ content.value }}</td>
+                    <td> {{ content.name }}</td>
+                    <td> {{ content.type }}</td>
+                    <td><a href="{{ urlFor("deleteContent", { id: content.content_id }) }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    {% block javascripts %}
+        <script>
+            const createRow = ($row) => {
+                let id = Math.floor(Math.random() * 100);
+                let $form = document.createElement('form')
+                $form.action = "/contents/create/{{ article.article_id }}"
+                $form.method = "POST"
+                $form.setAttribute("id", `form_${id}`)
+                let $fistTd = $row.insertCell(0)
+                $fistTd.appendChild(document.createTextNode('#'))
+                $fistTd.appendChild($form)
+
+                let $secondTd = $row.insertCell(1)
+                let $valueInput = document.createElement('input')
+                $valueInput.setAttribute("form", `form_${id}`)
+                $valueInput.required = true
+                $valueInput.classList.add("form-control")
+                $valueInput.setAttribute("name", `value_${id}`)
+                $secondTd.appendChild($valueInput)
+
+                let $fourthRow = $row.insertCell(2)
+                let $nameInput = document.createElement('input')
+                $nameInput.setAttribute("form", `form_${id}`)
+                $nameInput.required = true
+                $nameInput.classList.add("form-control")
+                $nameInput.setAttribute("name", `name_${id}`)
+                $fourthRow.appendChild($nameInput)
+
+                let $thirdTd = $row.insertCell(3)
+                let $select = createSelectElement(id)
+                $select.setAttribute("form", `form_${id}`)
+                $thirdTd.appendChild($select)
+
+                let $fifthRow = $row.insertCell(4)
+                let $button = document.createElement('button')
+                $button.setAttribute("form", `form_${id}`)
+                $button.classList.add("btn", "btn-success")
+                $button.innerText = "create"
+                $button.setAttribute("type", "submit")
+                $fifthRow.appendChild($button)
+            }
+
+            const createSelectElement = (id) => {
+                let $select = document.createElement("select");
+                $select.classList.add("form-control");
+                $select.setAttribute("name", `type_${id}`);
+                ['img', 'text', 'video'].forEach((type) => {
+                    let $option = document.createElement("option");
+                    $option.value = type;
+                    $option.text = type;
+                    $select.appendChild($option);
+                })
+                return $select;
+            }
+
+            $table = document.querySelector('table');
+            document.querySelector('.create-article').addEventListener('click', () => {
+                createRow($table.insertRow(-1));
+            })
+        </script>
+    {% endblock %}
 {% endblock %}

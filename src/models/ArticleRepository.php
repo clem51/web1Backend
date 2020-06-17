@@ -21,29 +21,6 @@ class ArticleRepository extends AbstractRepository
     }
 
     /**
-     * Format results to appear as a one to many orm operation
-     * @param array $data
-     * @return array
-     */
-    private function oneToMany(array $data)
-    {
-        $result = [];
-        foreach ($data as $record) {
-            $contents = ['type' => $record['type'], 'value' => $record['value'], 'name' => $record['name']];
-            $key = $record['article_id'];
-            if (array_key_exists($key, $result)) {
-                array_push($result[$key]['contents'], $contents);
-            } else {
-                $result[$key]['article_id'] = $record['article_id'];
-                $result[$key]['name'] = $record['article_name'];
-                $result[$key]['contents'] = [$contents];
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * @param $name
      * @param $content
      */
@@ -55,15 +32,7 @@ class ArticleRepository extends AbstractRepository
         $stmt->execute();
         $id = $this->db->connection->lastInsertId();
 
-        foreach ($content as $value) {
-            $sql = "INSERT INTO content (name, type, value, article) VALUES (:name, :type, :value, :article)";
-            $stmt = $this->db->connection->prepare($sql);
-            $stmt->bindParam(":type", $value["type"], PDO::PARAM_STR);
-            $stmt->bindParam(":value", $value["value"], PDO::PARAM_STR);
-            $stmt->bindParam(":article", $id, PDO::PARAM_INT);
-            $stmt->bindParam(":name", $value["name"], PDO::PARAM_STR);
-            $stmt->execute();
-        }
+        $this->insertContent($id, $content);
     }
 
     public function update($data, int $id): void
@@ -92,5 +61,29 @@ class ArticleRepository extends AbstractRepository
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $this->oneToMany($stmt->fetchAll(PDO::FETCH_ASSOC))[$id];
+    }
+
+
+    /**
+     * Format results to appear as a one to many orm operation
+     * @param array $data
+     * @return array
+     */
+    private function oneToMany(array $data)
+    {
+        $result = [];
+        foreach ($data as $record) {
+            $contents = ['type' => $record['type'], 'value' => $record['value'], 'name' => $record['name'], 'content_id' => $record['id']];
+            $key = $record['article_id'];
+            if (array_key_exists($key, $result)) {
+                array_push($result[$key]['contents'], $contents);
+            } else {
+                $result[$key]['article_id'] = $record['article_id'];
+                $result[$key]['name'] = $record['article_name'];
+                $result[$key]['contents'] = [$contents];
+            }
+        }
+
+        return $result;
     }
 }

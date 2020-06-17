@@ -45,21 +45,4 @@ class ArticlesController extends AbstractController
         $article = $repo->getById($id);
         return $this->template($twig, $response, 'update.twig', ['article' => $article]);
     }
-
-    /**
-     * Plug together form data with the same id
-     * @param array $data
-     * @return array
-     */
-    private function aggregate(array $data) :array
-    {
-        $result = [];
-        foreach ($data as $key => $value) {
-            preg_match("/^value_([0-9]+)/", $key, $id);
-            if ($id[1]) {
-                array_push($result, array('type' => $data["type_$id[1]"], 'value' => $value, "name" => $data["name_$id[1]"]));
-            }
-        }
-        return $result;
-    }
 }

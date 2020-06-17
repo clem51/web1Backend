@@ -1,5 +1,6 @@
 <?php
 
+use BackOffice\controllers\ContentController;
 use BackOffice\DatabaseFactory;
 use BackOffice\controllers\ApiController;
 use BackOffice\controllers\ArticlesController;
@@ -7,8 +8,10 @@ use BackOffice\controllers\LoginController;
 use BackOffice\middlewares\AuthenticationMiddleware;
 use BackOffice\models\Database;
 use DI\Bridge\Slim\Bridge;
+use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
+use Slim\Psr7\Request;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
@@ -80,8 +83,12 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     $group->get('/articles/{id}', [ApiController::class, 'detail']);
 });
 
+$app->group('/contents', function (RouteCollectorProxy $group) {
+    $group->get('delete/{id}', [ContentController::class, 'delete'])->setName('deleteContent');
+    $group->post('/create/{id}', [ContentController::class, 'create'])->setName('createContent');
+});
 
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function (Request $request, Response $response) {
     throw new HttpNotFoundException($request);
 });
 
