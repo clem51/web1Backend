@@ -73,7 +73,12 @@ $app->group('/login', function (RouteCollectorProxy $group) {
     $group->post('', [LoginController::class, 'login'])->setName('login');;
 });
 $app->get('/logout', [LoginController::class, 'logout']);
-$app->get('/api/articles', [ApiController::class, 'index']);
+
+$app->group('/api', function (RouteCollectorProxy $group){
+    $group->get('/articles', [ApiController::class, 'index']);
+    $group->get('/articles/{id}',[ApiController::class, 'detail']);
+});
+
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);

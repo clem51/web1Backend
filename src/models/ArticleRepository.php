@@ -77,10 +77,12 @@ class ArticleRepository extends AbstractRepository
 
     public function getById(int $id)
     {
-        $sql = "SELECT * FROM articles WHERE id= :id";
+        $sql = "SELECT A.id as article_id , A.name as article_name, C.*  
+                FROM articles A 
+                LEFT JOIN content C on A.id = C.article WHERE A.id=:id";
         $stmt = $this->db->connection->prepare($sql);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch();
+        return $this->oneToMany($stmt->fetchAll(PDO::FETCH_ASSOC))[$id];
     }
 }

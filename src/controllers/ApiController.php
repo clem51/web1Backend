@@ -11,4 +11,11 @@ class ApiController {
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
+    public function detail(int $id, Response $response, ArticleRepository $repo){
+        $article = $repo->getById($id);
+        $payload = json_encode(array('article'=> $article));
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }
+
