@@ -1,5 +1,5 @@
 
-##Adresse publique du serveur
+## Adresse publique du serveur
 
 https://backoffice.zelazna.fr/login
 
@@ -16,7 +16,7 @@ Cela consiste en un découpage de la logique entre les différentes types de cla
 
 ### Les routes API
 
-* Pour un article particulier :
+* Pour un article en particulier :
 https://backoffice.zelazna.fr/api/articles/{id}
 
 * Pour tout les articles :
@@ -24,10 +24,10 @@ https://backoffice.zelazna.fr/api/articles
 
 ### Choix techniques
 
-- **Slim 4** Un micro-framework de php qui gère le routing.
+- **Slim 4** : Un micro-framework de php qui gère le routing.
 
-- **Php DI** Une librairies qui couplée avec Slim permet d'injecter des classes.
+- **Php DI** : Une librairies qui couplée avec Slim permet d'utiliser des classes dans d'autres de manière automatisée avec l'injection de dépendances.
        
-- **Twig** Un langague de templating pour le html en php permet de faire plus simplement et avec plus d'options la composante HTML.
+- **Twig** : Un langague de templating pour le html en php permet de faire plus simplement et avec plus d'options la composante HTML.
 
-- **Dokku** = Solution gratuite inspirée d'Heroku pour l'hébergement de l'application.
+- **Dokku** : Solution gratuite inspirée d'Heroku pour l'hébergement de l'application.
