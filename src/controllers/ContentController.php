@@ -12,8 +12,9 @@ class ContentController extends AbstractController
 {
     public function delete(int $id, Response $response, ContentRepository $repo): Response
     {
+        $content = $repo->getById($id);
         $repo->delete($id);
-        return $response->withHeader('Location', "/");
+        return $response->withHeader('Location', "/update/{$content['article']}");
     }
 
     public function create(int $id, Response $response, ContentRepository $repo, Request $request): Response

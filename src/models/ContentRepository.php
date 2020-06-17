@@ -18,4 +18,13 @@ class ContentRepository extends AbstractRepository
     {
         $this->insertContent($id, $content);
     }
+
+    public function getById(int $id)
+    {
+        $sql = "SELECT * FROM content  WHERE id= :id";
+        $stmt = $this->db->connection->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
 }

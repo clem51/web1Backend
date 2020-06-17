@@ -9,9 +9,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Update Article">
+                <button class="btn btn-primary create-content">Create Content</button>
             </div>
+
         </form>
-        <button class="btn btn-primary create-article">Create Content</button>
         <table class="table">
             <thead>
             <tr>
@@ -93,7 +94,8 @@
             }
 
             $table = document.querySelector('table');
-            document.querySelector('.create-article').addEventListener('click', (e) => {
+            document.querySelector('.create-content').addEventListener('click', (e) => {
+                e.preventDefault()
                 createRow($table.insertRow(-1));
                 e.target.disabled = true;
             })

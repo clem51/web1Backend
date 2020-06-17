@@ -51,6 +51,10 @@ $container->set(Database::class, factory(function () use ($app) {
     return DatabaseFactory::getDevelopmentServerConnection();
 }));
 
+$container->set(AuthenticationMiddleware::class, factory(function () use ($container) {
+    return new AuthenticationMiddleware($container);
+}));
+
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
@@ -70,7 +74,7 @@ $app->group('/', function (RouteCollectorProxy $group) {
     $group->get('delete/{id}', [ArticlesController::class, 'delete'])->setName('delete');
     $group->post('update/{id}', [ArticlesController::class, 'do_update'])->setName('do_update');
     $group->get('update/{id}', [ArticlesController::class, 'update'])->setName('update');
-})->add(new AuthenticationMiddleware($container));
+})->add(AuthenticationMiddleware::class);
 
 $app->group('/login', function (RouteCollectorProxy $group) {
     $group->get('', [LoginController::class, 'index'])->setName('index');;
@@ -84,9 +88,9 @@ $app->group('/api', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/contents', function (RouteCollectorProxy $group) {
-    $group->get('delete/{id}', [ContentController::class, 'delete'])->setName('deleteContent');
+    $group->get('/delete/{id}', [ContentController::class, 'delete'])->setName('deleteContent');
     $group->post('/create/{id}', [ContentController::class, 'create'])->setName('createContent');
-});
+})->add(AuthenticationMiddleware::class);
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function (Request $request, Response $response) {
     throw new HttpNotFoundException($request);
