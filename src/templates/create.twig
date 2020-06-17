@@ -16,7 +16,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="post" class="form-create">
+                    <form action="" method="post" class="form-create" enctype="multipart/form-data">
                         <div class="form-group">
                             <label>Text</label>
                             <input type="text" name="name" class="form-control">
@@ -40,11 +40,16 @@
                 let $select = document.createElement("select");
                 $select.classList.add("form-control");
                 $select.setAttribute("name", `type_${id}`);
-                ['img', 'text', 'video'].forEach((type) => {
+                ['text', 'img', 'video'].forEach((type) => {
                     let $option = document.createElement("option");
                     $option.value = type;
                     $option.text = type;
                     $select.appendChild($option);
+                })
+                $select.addEventListener('change', (e) => {
+                    if (e.target.value === 'img') {
+                        e.target.nextSibling.type = "file"
+                    }
                 })
                 return $select;
             }

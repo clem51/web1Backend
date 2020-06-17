@@ -5,7 +5,8 @@
     "slim/twig-view": "^3.1",
     "php-di/slim-bridge": "^3.0",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "aws/aws-sdk-php": "^3.142"
   },
   "autoload": {
     "psr-4": {
