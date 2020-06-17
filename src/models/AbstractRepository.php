@@ -13,6 +13,11 @@ abstract class AbstractRepository
         $this->db = $database;
     }
 
+    /**
+     * this loop insert the content in database through the article id
+     * @param int $id
+     * @param array $content
+     */
     protected function insertContent(int $id, array $content): void
     {
         foreach ($content as $value) {
