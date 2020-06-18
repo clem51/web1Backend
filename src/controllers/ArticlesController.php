@@ -24,16 +24,11 @@ class ArticlesController extends AbstractController
         $body = $request->getParsedBody();
         $files = $request->getUploadedFiles();
 
-        if ($files) {
-            $file = $files[key($files)];
-            $name = $file->getClientFilename();
-
-            foreach ($files as $key => $file) {
-                $files[$key] = explode("?", $uploadService->run($name, $file->getStream()))[0];
-            }
+        foreach ($files as $key => $file) {
+            $files[$key] = explode("?", $uploadService->run($file->getClientFilename(), $file->getStream()))[0];
         }
 
-        $content_params = $this->aggregate($body + ($files ?: []));
+        $content_params = $this->aggregate($body + $files);
         $repo->create($body['name'], $content_params);
         $response->withStatus(201);
         return $response->withHeader('Location', '/');
