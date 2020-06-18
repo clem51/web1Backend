@@ -22,7 +22,7 @@ class ArticlesController extends AbstractController
     public function create(Request $request, Response $response, ArticleRepository $repo, UploadService $uploadService): Response
     {
         $body = $request->getParsedBody();
-        $files = $request->getUploadedFiles() ?: [];
+        $files = $request->getUploadedFiles();
 
         if ($files) {
             $file = $files[key($files)];
@@ -33,8 +33,7 @@ class ArticlesController extends AbstractController
             }
         }
 
-
-        $content_params = $this->aggregate($body + $files);
+        $content_params = $this->aggregate($body + ($files ?: []));
         $repo->create($body['name'], $content_params);
         $response->withStatus(201);
         return $response->withHeader('Location', '/');
