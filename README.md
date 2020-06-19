@@ -31,3 +31,9 @@ https://backoffice.zelazna.fr/api/articles/1
 - **Twig** : Un langague de templating pour le html en php permet de faire plus simplement et avec plus d'options la composante HTML.
 
 - **Dokku** : Solution gratuite inspirée d'Heroku pour l'hébergement de l'application.
+
+### Install
+
+1. Create a .env from the .sample.env and populate the present variables
+2. run `doker-compose build && docker-compose up`
+3. go http://localhost:8100/

@@ -10,7 +10,11 @@ services:
       MYSQL_PASSWORD: pass
     ports:
       - "9906:3306"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
   web:
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=mysql://user:pass@db:3306/backofficedb
     build: .

@@ -16,7 +16,7 @@ class ArticlesController extends AbstractController
     {
         // get All articles and show them
         $articles = $repo->getAll();
-        return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles, 'content_type' => CONTENT_TYPE]);
+        return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles]);
     }
 
     public function create(Request $request, Response $response, ArticleRepository $repo, UploadService $uploadService): Response
