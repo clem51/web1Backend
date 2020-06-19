@@ -16,18 +16,16 @@ class ArticlesController extends AbstractController
     {
         // get All articles and show them
         $articles = $repo->getAll();
-        return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles, 'content_type' => CONTENT_TYPE]);
+        return $this->template($twig, $response, 'articles.twig', ['username' => $session->getCurrentUser(), 'articles' => $articles]);
     }
 
     public function create(Request $request, Response $response, ArticleRepository $repo, UploadService $uploadService): Response
     {
         $body = $request->getParsedBody();
         $files = $request->getUploadedFiles();
-        $file = $files[key($files)];
-        $name = $file->getClientFilename();
 
         foreach ($files as $key => $file) {
-            $files[$key] = explode("?", $uploadService->run($name, $file->getStream()))[0];
+            $files[$key] = explode("?", $uploadService->run($file->getClientFilename(), $file->getStream()))[0];
         }
 
         $content_params = $this->aggregate($body + $files);
