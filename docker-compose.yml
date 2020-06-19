@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: passwd
+      MYSQL_DATABASE: backofficedb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "9906:3306"
+  web:
+    environment:
+      - DATABASE_URL=mysql://user:pass@db:3306/backofficedb
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8100:80"
+    stdin_open: true
+    tty: true
